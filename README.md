@@ -1,1 +1,3 @@
-# ConvertTV2Radio
+# ConvertMovie2Radio
+
+目的: 車で動画ラジオを聴きたいけど通信料が重いので、音声だけ抽出して聴きたい
