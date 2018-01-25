@@ -5,11 +5,12 @@ from pydrive.drive import GoogleDrive
 import os
 
 fileTitle = ""
+folderPath = ""
 
 def download(url):
     yt = YouTube(url)
     video = yt.streams.filter(file_extension='mp4').first()
-    video.download()
+    video.download("/tmp")
 
     #特殊文字が入っていると消されて、ファイルのパスを取得できないので
     global fileTitle
@@ -17,17 +18,21 @@ def download(url):
     list = ["/", ":", "*", "?", "<", ">", "|"]
     for item in list:
         fileTitle = fileTitle.replace(item, "")
+    global folderPath
+    folderPath = "/tmp/" + fileTitle
     print(fileTitle, "のダウンロード完了")
 
 
 def convert():
-    stream = ffmpeg.input(fileTitle + ".mp4")
-    stream = ffmpeg.output(stream, fileTitle + ".mp3")
+    stream = ffmpeg.input(folderPath + ".mp4")
+    print("inputおけ")
+    stream = ffmpeg.output(stream, folderPath + ".mp3")
+    print("oututおけ")
     ffmpeg.run(stream)
     print("コンバート完了")
 
     # 要らなくなったので削除
-    os.remove(fileTitle + ".mp4")
+    os.remove(folderPath + ".mp4")
 
 
 def upload():
@@ -48,7 +53,7 @@ def upload():
     print("アップロード完了")
 
     # 要らなくなったので削除
-    os.remove(name)
+    os.remove(folderPath+".mp3")
 
 
 def start(url):
