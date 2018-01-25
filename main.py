@@ -6,15 +6,18 @@ import os
 
 fileTitle = ""
 
-def download():
-    url = input("URL>")
+def download(url):
     yt = YouTube(url)
-    video = yt.streams.filter().first()
+    video = yt.streams.filter(file_extension='mp4').first()
     video.download()
-    print(yt.title, "のダウンロード完了")
 
+    #特殊文字が入っていると消されて、ファイルのパスを取得できないので
     global fileTitle
     fileTitle = yt.title
+    list = ["/", ":", "*", "?", "<", ">", "|"]
+    for item in list:
+        fileTitle = fileTitle.replace(item, "")
+    print(fileTitle, "のダウンロード完了")
 
 
 def convert():
@@ -48,7 +51,7 @@ def upload():
     os.remove(name)
 
 
-if __name__ == '__main__':
-    download()
+def start(url):
+    download(url)
     convert()
     upload()
