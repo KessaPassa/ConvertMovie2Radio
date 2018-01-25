@@ -4,5 +4,5 @@
   "image": "heroku/python",
   "repository": "https://github.com/KessaPassa/ConvertMovie2Radio",
   "keywords": ["python", "api" ],
-  "addons": [ "heroku-postgresql" , "schedulestandard"]
+  "addons": [ "heroku-postgresql"]
 }
