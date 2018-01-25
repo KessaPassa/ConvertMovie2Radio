@@ -5,8 +5,10 @@ import main
 
 # flaskの設定
 app = Flask(__name__)
-port = int(os.getenv('VCAP_APP_PORT', 0))
 
+@app.route('/')
+def hello_world():
+    return 'Hello World!'
 
 @app.route("/api", methods=['GET'])
 def index():
@@ -19,4 +21,4 @@ def index():
 
 
 if __name__ == '__main__':
-    app.run(host='herokuapp.com', port=port)
+    app.run()
