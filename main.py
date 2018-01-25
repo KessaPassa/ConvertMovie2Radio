@@ -26,9 +26,7 @@ def download(url):
 
 def convert():
     stream = ffmpeg.input(folderPath + ".mp4")
-    print("inputおけ")
     stream = ffmpeg.output(stream, folderPath + ".mp3")
-    print("oututおけ")
     ffmpeg.run(stream)
     print("コンバート完了")
 
@@ -37,19 +35,18 @@ def convert():
 
 
 def upload():
-    name = fileTitle + ".mp4"
-    print(name)
+    print(folderPath)
     gauth = GoogleAuth()
     gauth.CommandLineAuth()
     drive = GoogleDrive(gauth)
 
     folder_id = '1iopccLVKuBrYRZx8hnfXGsvNrLTZpB1b'
     metadata = {
-        'title': name,
+        'title': fileTitle + ".mp4",
         'parents': [{"kind": "drive#fileLink", "id": folder_id}]
     }
     f = drive.CreateFile(metadata)
-    f.SetContentFile(name)
+    f.SetContentFile(folderPath + ".mp4")
     f.Upload()
     print("アップロード完了")
 
