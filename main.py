@@ -41,13 +41,13 @@ def upload():
     gauth.CommandLineAuth()
     drive = GoogleDrive(gauth)
 
-    mp3 = folderPath + ".mp4"
+    mp3 = folderPath + ".mp3"
     folder_id = '1iopccLVKuBrYRZx8hnfXGsvNrLTZpB1b'
     metadata = {
         'parents': [{"kind": "drive#fileLink", "id": folder_id}]
     }
     f = drive.CreateFile(metadata)
-    f.SetContentFile(folderPath + ".mp4")
+    f.SetContentFile(mp3)
     f.Upload()
     print("アップロード完了")
 
@@ -57,5 +57,5 @@ def upload():
 
 def start(url):
     download(url)
-    # convert()
+    convert()
     upload()
