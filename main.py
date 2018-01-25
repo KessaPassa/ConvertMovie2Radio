@@ -21,6 +21,7 @@ def download(url):
     global folderPath
     folderPath = "/tmp/" + fileTitle
     print(fileTitle, "のダウンロード完了")
+    print(folderPath)
 
 
 def convert():
@@ -36,7 +37,7 @@ def convert():
 
 
 def upload():
-    name = fileTitle + ".mp3"
+    name = fileTitle + ".mp4"
     print(name)
     gauth = GoogleAuth()
     gauth.CommandLineAuth()
@@ -58,5 +59,5 @@ def upload():
 
 def start(url):
     download(url)
-    convert()
+    # convert()
     upload()
