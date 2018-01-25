@@ -10,7 +10,7 @@ folderPath = ""
 def download(url):
     yt = YouTube(url)
     video = yt.streams.filter(file_extension='mp4').first()
-    video.download("tmp")
+    video.download()
 
     #特殊文字が入っていると消されて、ファイルのパスを取得できないので
     global fileTitle
@@ -19,7 +19,7 @@ def download(url):
     for item in list:
         fileTitle = fileTitle.replace(item, "")
     global folderPath
-    folderPath = "tmp/" + fileTitle
+    folderPath = fileTitle
     print(fileTitle, "のダウンロード完了")
 
 
