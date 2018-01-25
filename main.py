@@ -41,7 +41,7 @@ def upload():
     gauth.CommandLineAuth()
     drive = GoogleDrive(gauth)
 
-    mp3 = folderPath + ".mp3"
+    mp3 = folderPath + ".mp4"
     folder_id = '1iopccLVKuBrYRZx8hnfXGsvNrLTZpB1b'
     metadata = {
         'parents': [{"kind": "drive#fileLink", "id": folder_id}]
