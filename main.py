@@ -47,7 +47,7 @@ def upload():
         'parents': [{"kind": "drive#fileLink", "id": folder_id}]
     }
     f = drive.CreateFile(metadata)
-    f.SetContentFile(mp3)
+    f.SetContentFile(folderPath + ".mp4")
     f.Upload()
     print("アップロード完了")
 
@@ -57,5 +57,5 @@ def upload():
 
 def start(url):
     download(url)
-    convert()
+    # convert()
     upload()
