@@ -10,7 +10,7 @@ folderPath = ""
 def download(url):
     yt = YouTube(url)
     video = yt.streams.filter(file_extension='mp4').first()
-    video.download("/tmp")
+    video.download("tmp")
 
     #特殊文字が入っていると消されて、ファイルのパスを取得できないので
     global fileTitle
@@ -19,42 +19,43 @@ def download(url):
     for item in list:
         fileTitle = fileTitle.replace(item, "")
     global folderPath
-    folderPath = "/tmp/" + fileTitle
+    folderPath = "tmp/" + fileTitle
     print(fileTitle, "のダウンロード完了")
-    print(folderPath)
 
 
 def convert():
-    stream = ffmpeg.input(folderPath + ".mp4")
-    stream = ffmpeg.output(stream, folderPath + ".mp3")
+    mp4 = folderPath + ".mp4"
+    mp3 = folderPath + ".mp3"
+
+    stream = ffmpeg.input(mp4)
+    stream = ffmpeg.output(stream, mp3)
     ffmpeg.run(stream)
     print("コンバート完了")
 
     # 要らなくなったので削除
-    os.remove(folderPath + ".mp4")
+    os.remove(mp4)
 
 
 def upload():
-    print(folderPath)
     gauth = GoogleAuth()
     gauth.CommandLineAuth()
     drive = GoogleDrive(gauth)
 
+    mp3 = folderPath + ".mp3"
     folder_id = '1iopccLVKuBrYRZx8hnfXGsvNrLTZpB1b'
     metadata = {
-        'title': fileTitle + ".mp4",
         'parents': [{"kind": "drive#fileLink", "id": folder_id}]
     }
     f = drive.CreateFile(metadata)
-    f.SetContentFile(folderPath + ".mp3")
+    f.SetContentFile(mp3)
     f.Upload()
     print("アップロード完了")
 
     # 要らなくなったので削除
-    os.remove(folderPath+".mp3")
+    os.remove(mp3)
 
 
 def start(url):
     download(url)
-    # convert()
+    convert()
     upload()
