@@ -9,15 +9,19 @@ fileTitle = ""
 
 def download(url):
     yt = YouTube(url)
+
+    # 特殊文字が入っていると消されて、ファイルのパスを取得できないので
+    global fileTitle
+    fileTitle = yt.title
+    list = ["　", "/", ":", "*", "?", "<", ">", "|", "\"", "\\", "\'", "."]
+    for item in list:
+        fileTitle = fileTitle.replace(item, "")
+    yt.player_config_args["title"] = fileTitle
+
     video = yt.streams.filter(file_extension='mp4').first()
     video.download()
 
-    #特殊文字が入っていると消されて、ファイルのパスを取得できないので
-    global fileTitle
-    fileTitle = yt.title
-    list = ["/", ":", "*", "?", "<", ">", "|", "\"", "\\", "\'"]
-    for item in list:
-        fileTitle = fileTitle.replace(item, "")
+
     print(fileTitle, "のダウンロード完了")
 
 
