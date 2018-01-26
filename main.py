@@ -4,7 +4,6 @@ import ffmpeg
 from pydrive.auth import GoogleAuth
 from pydrive.drive import GoogleDrive
 import os
-import asyncio
 
 fileTitle = ""
 
@@ -16,7 +15,7 @@ def download(url):
     #特殊文字が入っていると消されて、ファイルのパスを取得できないので
     global fileTitle
     fileTitle = yt.title
-    list = [" ", "/", ":", "*", "?", "<", ">", "|", "\"", "\\", "\'"]
+    list = ["/", ":", "*", "?", "<", ">", "|", "\"", "\\", "\'"]
     for item in list:
         fileTitle = fileTitle.replace(item, "")
     print(fileTitle, "のダウンロード完了")

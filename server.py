@@ -20,7 +20,7 @@ def index():
     if not (url is None):
         thread = threading.Thread(target=main.start, args=(url, ))
         thread.start()
-        # asyncio.ensure_future(main.start(url))
+
         print("非同期処理開始")
         response = jsonify({'message': "File is uploaded GoogleDrive"})
         response.status_code = 200
