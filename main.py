@@ -4,6 +4,7 @@ import ffmpeg
 from pydrive.auth import GoogleAuth
 from pydrive.drive import GoogleDrive
 import os
+import asyncio
 
 fileTitle = ""
 
@@ -54,9 +55,11 @@ def upload():
 
 
 #非同期処理
-async def start(url):
-    pass
+@asyncio.coroutine
+def start(url, loop):
+    # pass
 
     download(url)
     convert()
     upload()
+    loop.close()
