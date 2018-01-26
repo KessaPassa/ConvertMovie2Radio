@@ -6,10 +6,10 @@ verify_ssl = true
 
 [packages]
 
-ffmpeg-python = “*”
-pytube = “*”
-PyDrive = “*”
-Flask = “*”
+ffmpeg-python = {version=“*”}
+pytube = {version=“*”}
+PyDrive = {version=“*”}
+Flask = {version=“*”}
 
 
 [requires]
