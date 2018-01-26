@@ -7,10 +7,10 @@
   "addons": [ "heroku-postgresql"],
   "buildpacks": [
     {
-      "url": "https://github.com/integricho/heroku-buildpack-python-ffmpeg"
+      "url": "https://github.com/shunjikonishi/heroku-buildpack-ffmpeg"
     },
     {
-      "url": "heroku/ruby"
+      "url": "heroku/python"
     }
   ]
 }
