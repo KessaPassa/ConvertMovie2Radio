@@ -2,6 +2,7 @@
 from flask import Flask, jsonify, request
 import main
 import os
+import asyncio
 
 # flaskの設定
 app = Flask(__name__)
@@ -17,7 +18,9 @@ def index():
     response = ""
     url = request.args.get("url")
     if not (url is None):
-        main.start(url)
+        print("非同期処理")
+        asyncio.ensure_future(main.start(url))
+        print("開始")
         response = jsonify({'message': "File is uploaded GoogleDrive"})
         response.status_code = 200
 

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from pytube import YouTube
 import ffmpeg
 from pydrive.auth import GoogleAuth
@@ -55,7 +56,10 @@ def upload():
     os.remove(mp3)
 
 
-def start(url):
+#非同期処理
+async def start(url):
+    pass
+
     download(url)
     convert()
     upload()
