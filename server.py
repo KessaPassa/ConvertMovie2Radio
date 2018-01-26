@@ -18,9 +18,12 @@ def index():
     response = ""
     url = request.args.get("url")
     if not (url is None):
-        print("非同期処理")
-        asyncio.ensure_future(main.start(url))
-        print("開始")
+        # asyncio.wrap_future(main.start(url))
+        loop = asyncio.get_event_loop()
+        loop.run_until_complete(main.start(url))
+        loop.close()
+        main.start(url)
+        print("非同期処理開始")
         response = jsonify({'message': "File is uploaded GoogleDrive"})
         response.status_code = 200
 

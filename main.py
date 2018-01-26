@@ -6,7 +6,6 @@ from pydrive.drive import GoogleDrive
 import os
 
 fileTitle = ""
-folderPath = ""
 
 def download(url):
     yt = YouTube(url)
@@ -16,17 +15,15 @@ def download(url):
     #特殊文字が入っていると消されて、ファイルのパスを取得できないので
     global fileTitle
     fileTitle = yt.title
-    list = ["/", ":", "*", "?", "<", ">", "|"]
+    list = ["/", ":", "*", "?", "<", ">", "|", "\"", "\\", "\'"]
     for item in list:
         fileTitle = fileTitle.replace(item, "")
-    global folderPath
-    folderPath = fileTitle
     print(fileTitle, "のダウンロード完了")
 
 
 def convert():
-    mp4 = folderPath + ".mp4"
-    mp3 = folderPath + ".mp3"
+    mp4 = fileTitle + ".mp4"
+    mp3 = fileTitle + ".mp3"
 
     stream = ffmpeg.input(mp4)
     stream = ffmpeg.output(stream, mp3)
@@ -42,7 +39,7 @@ def upload():
     gauth.CommandLineAuth()
     drive = GoogleDrive(gauth)
 
-    mp3 = folderPath + ".mp3"
+    mp3 = fileTitle + ".mp3"
     folder_id = '1iopccLVKuBrYRZx8hnfXGsvNrLTZpB1b'
     metadata = {
         'parents': [{"kind": "drive#fileLink", "id": folder_id}]
