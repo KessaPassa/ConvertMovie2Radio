@@ -1,0 +1,2 @@
+ffmpeg-python==0.1.10
+future==0.16.0
