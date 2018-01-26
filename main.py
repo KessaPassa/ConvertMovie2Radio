@@ -55,11 +55,9 @@ def upload():
 
 
 #非同期処理
-@asyncio.coroutine
 def start(url, loop):
     # pass
-
     download(url)
     convert()
     upload()
-    loop.close()
+    loop.call_soon(loop.stop)
