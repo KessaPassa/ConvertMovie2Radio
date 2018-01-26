@@ -4,5 +4,13 @@
   "image": "heroku/python",
   "repository": "https://github.com/KessaPassa/ConvertMovie2Radio",
   "keywords": ["python", "api" ],
-  "addons": [ "heroku-postgresql"]
+  "addons": [ "heroku-postgresql"],
+  "buildpacks": [
+    {
+      "url": "https://github.com/integricho/heroku-buildpack-python-ffmpeg"
+    },
+    {
+      "url": "heroku/ruby"
+    }
+  ]
 }
