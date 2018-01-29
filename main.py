@@ -16,11 +16,11 @@ def download(url):
     list = ["　", "/", ":", "*", "?", "<", ">", "|", "\"", "\\", "\'", "."]
     for item in list:
         fileTitle = fileTitle.replace(item, "")
+    #タイトルを変更
     yt.player_config_args["title"] = fileTitle
 
     video = yt.streams.filter(file_extension='mp4').first()
     video.download()
-
 
     print(fileTitle, "のダウンロード完了")
 
