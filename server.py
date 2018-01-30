@@ -13,6 +13,7 @@ def hello_world():
     return 'Hello World!'
 
 
+@app.route("/api", methods=['POST'])
 @app.route("/api", methods=['GET'])
 def index():
     response = ""
@@ -30,6 +31,8 @@ def index():
         response.status_code = 404
 
     return response
+
+
 
 
 if __name__ == '__main__':
