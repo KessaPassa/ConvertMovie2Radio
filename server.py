@@ -13,13 +13,25 @@ def hello_world():
     return 'Hello World!'
 
 
-@app.route("/api", methods=['POST'])
 @app.route("/api", methods=['GET'])
-def index():
-    response = ""
+def get():
+    print("getメソッドです")
     url = request.args.get("url")
+    return start(url)
+
+
+@app.route("/api", methods=['POST'])
+def post():
+    print("postメソッドです")
+    url = request.form["url"]
+    return start(url)
+
+
+def start(url):
+    response = ""
+    print(url)
     if not (url is None):
-        thread = threading.Thread(target=main.start, args=(url, ))
+        thread = threading.Thread(target=main.start, args=(url,))
         thread.start()
 
         print("非同期処理開始")
@@ -31,7 +43,6 @@ def index():
         response.status_code = 404
 
     return response
-
 
 
 

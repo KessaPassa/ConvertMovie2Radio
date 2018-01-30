@@ -59,7 +59,6 @@ def upload():
 
 #非同期処理
 def start(url):
-    print(url)
     download(url)
     convert()
     upload()
