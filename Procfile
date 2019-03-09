@@ -1,1 +1,1 @@
-web: html index.html
+web: python manage.py runserver
