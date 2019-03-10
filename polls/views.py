@@ -3,7 +3,6 @@ from src import main
 
 
 def index(request):
-    print('インデックス')
     url = request.GET.get('url_field')
     if url:
         main.thred(url)

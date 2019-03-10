@@ -10,6 +10,7 @@ fileTitle = ""
 
 def download(url):
     yt = YouTube(url)
+    print('おけ')
 
     # 特殊文字が入っていると消されて、ファイルのパスを取得できないので
     global fileTitle
@@ -71,6 +72,11 @@ def thred(url):
 
 def start(url):
     print(url)
-    download(url)
-    # convert()
-    # upload()
+
+    try:
+        download(url)
+        # convert()
+        # upload()
+
+    except:
+        print('ダメだった')
