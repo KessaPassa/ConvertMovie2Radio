@@ -1,11 +1,12 @@
-# -*- coding: utf-8 -*-
 from pytube import YouTube
 import ffmpeg
 from pydrive.auth import GoogleAuth
 from pydrive.drive import GoogleDrive
 import os
+import threading
 
 fileTitle = ""
+
 
 def download(url):
     yt = YouTube(url)
@@ -16,11 +17,13 @@ def download(url):
     list = ["　", "/", ":", "*", "?", "<", ">", "|", "\"", "\\", "\'", "."]
     for item in list:
         fileTitle = fileTitle.replace(item, "")
-    #タイトルを変更
+    # タイトルを変更
     yt.player_config_args["title"] = fileTitle
 
-    video = yt.streams.filter(file_extension='mp4').first()
-    video.download()
+    # video = yt.streams.filter(progressive=True, file_extension='mp4').first()
+    video = yt.streams.filter(adaptive=True, only_audio=True)
+    print(video.all())
+    video.first().download()
 
     print(fileTitle, "のダウンロード完了")
 
@@ -28,9 +31,11 @@ def download(url):
 def convert():
     mp4 = fileTitle + ".mp4"
     mp3 = fileTitle + ".mp3"
-
+    print('1')
     stream = ffmpeg.input(mp4)
+    print('2')
     stream = ffmpeg.output(stream, mp3)
+    print('3')
     ffmpeg.run(stream)
     print("コンバート完了")
 
@@ -57,8 +62,15 @@ def upload():
     os.remove(mp3)
 
 
-#非同期処理
+# 非同期処理
+def thred(url):
+    print("非同期処理開始")
+    thread = threading.Thread(target=start, args=(url,))
+    thread.start()
+
+
 def start(url):
+    print(url)
     download(url)
-    convert()
-    upload()
+    # convert()
+    # upload()

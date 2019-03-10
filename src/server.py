@@ -1,6 +1,5 @@
-# -*- coding: utf-8 -*-
 from flask import Flask, jsonify, request
-import main
+from . import main
 import os
 import threading
 
@@ -8,19 +7,14 @@ import threading
 app = Flask(__name__)
 
 
-@app.route('/')
-def hello_world():
-    return 'Hello World!'
-
-
-@app.route("/api", methods=['GET'])
+@app.route("/convert2", methods=['GET'])
 def get():
     print("getメソッドです")
     url = request.args.get("url")
     return start(url)
 
 
-@app.route("/api", methods=['POST'])
+@app.route("/convert2", methods=['POST'])
 def post():
     print("postメソッドです")
     url = request.form["url"]
@@ -44,8 +38,6 @@ def start(url):
 
     return response
 
-
-
-if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 5000))
-    app.run(host='0.0.0.0', port=port)
+# if __name__ == '__main__':
+#     port = int(os.environ.get('PORT', 5000))
+#     app.run(host='0.0.0.0', port=port)
