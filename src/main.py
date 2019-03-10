@@ -1,9 +1,9 @@
-# -*- coding: utf-8 -*-
 from pytube import YouTube
 import ffmpeg
 from pydrive.auth import GoogleAuth
 from pydrive.drive import GoogleDrive
 import os
+import threading
 
 fileTitle = ""
 
@@ -20,8 +20,10 @@ def download(url):
     # タイトルを変更
     yt.player_config_args["title"] = fileTitle
 
-    video = yt.streams.filter(file_extension='mp4').first()
-    video.download()
+    # video = yt.streams.filter(progressive=True, file_extension='mp4').first()
+    video = yt.streams.filter(adaptive=True, only_audio=True)
+    print(video.all())
+    video.first().download()
 
     print(fileTitle, "のダウンロード完了")
 
@@ -61,8 +63,14 @@ def upload():
 
 
 # 非同期処理
+def thred(url):
+    print("非同期処理開始")
+    thread = threading.Thread(target=start, args=(url,))
+    thread.start()
+
+
 def start(url):
     print(url)
-    # download(url)
+    download(url)
     # convert()
     # upload()
