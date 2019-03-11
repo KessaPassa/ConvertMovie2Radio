@@ -10,7 +10,6 @@ file_name = ""
 
 def download(url):
     yt = YouTube(url)
-    print('おけ')
 
     # 特殊文字が入っていると消されて、ファイルのパスを取得できないので
     global file_name
@@ -40,14 +39,29 @@ def convert():
 
 
 def upload():
+    save_file = 'credentials.json'
+
     gauth = GoogleAuth()
-
+    # Try to load saved client credentials
     print('1')
-    gauth.LoadCredentialsFile()
-    print('2')
-    drive = GoogleDrive(gauth)
-    print('3')
+    gauth.LoadCredentialsFile(save_file)
+    if gauth.credentials is None:
+        # Authenticate if they're not there
+        gauth.LocalWebserverAuth()
+        print('2')
+    elif gauth.access_token_expired:
+        # Refresh them if expired
+        gauth.Refresh()
+        print('3')
+    else:
+        # Initialize the saved creds
+        gauth.Authorize()
+        print('4')
+    # Save the current credentials to a file
+    gauth.SaveCredentialsFile(save_file)
+    print('5')
 
+    drive = GoogleDrive(gauth)
     mp3 = file_name + ".mp3"
     folder_id = '1iopccLVKuBrYRZx8hnfXGsvNrLTZpB1b'
     metadata = {
