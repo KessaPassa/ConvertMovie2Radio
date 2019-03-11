@@ -5,7 +5,7 @@ from pydrive.drive import GoogleDrive
 import os
 import threading
 
-fileTitle = ""
+file_name = ""
 
 
 def download(url):
@@ -13,35 +13,38 @@ def download(url):
     print('おけ')
 
     # 特殊文字が入っていると消されて、ファイルのパスを取得できないので
-    global fileTitle
-    fileTitle = yt.title
+    global file_name
+    file_name = yt.title
     list = ["　", "/", ":", "*", "?", "<", ">", "|", "\"", "\\", "\'", "."]
     for item in list:
-        fileTitle = fileTitle.replace(item, "")
+        file_name = file_name.replace(item, "")
     # タイトルを変更
-    yt.player_config_args["title"] = fileTitle
+    yt.player_config_args["title"] = file_name
 
-    # video = yt.streams.filter(progressive=True, file_extension='mp4').first()
-    video = yt.streams.filter(adaptive=True, only_audio=True)
-    print(video.all())
-    video.first().download()
+    video = yt.streams.filter(progressive=True, file_extension='mp4').first()
+    video.download()
 
-    print(fileTitle, "のダウンロード完了")
+    print(file_name, "のダウンロード完了")
 
 
 def convert():
-    mp4 = fileTitle + ".mp4"
-    mp3 = fileTitle + ".mp3"
-    print('1')
-    stream = ffmpeg.input(mp4)
-    print('2')
-    stream = ffmpeg.output(stream, mp3)
-    print('3')
-    ffmpeg.run(stream)
-    print("コンバート完了")
+    print(file_name)
+    convert_cmd = 'ffmpeg -i {}.mp4 {}.mp3'.format(file_name, file_name)
+    os.system(convert_cmd)
+    print('コマンドコンバート成功')
 
-    # 要らなくなったので削除
-    os.remove(mp4)
+    # mp4 = fileTitle + ".mp4"
+    # mp3 = fileTitle + ".mp3"
+    # print('1')
+    # stream = ffmpeg.input(mp4)
+    # print('2')
+    # stream = ffmpeg.output(stream, mp3)
+    # print('3')
+    # ffmpeg.run(stream)
+    # print("コンバート完了")
+    #
+    # # 要らなくなったので削除
+    # os.remove(mp4)
 
 
 def upload():
@@ -49,7 +52,7 @@ def upload():
     gauth.CommandLineAuth()
     drive = GoogleDrive(gauth)
 
-    mp3 = fileTitle + ".mp3"
+    mp3 = file_name + ".mp3"
     folder_id = '1iopccLVKuBrYRZx8hnfXGsvNrLTZpB1b'
     metadata = {
         'parents': [{"kind": "drive#fileLink", "id": folder_id}]
@@ -75,7 +78,7 @@ def start(url):
 
     try:
         download(url)
-        # convert()
+        convert()
         # upload()
 
     except:
