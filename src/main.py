@@ -28,35 +28,31 @@ def download(url):
 
 
 def convert():
-    print(file_name)
-    convert_cmd = 'ffmpeg -i {}.mp4 {}.mp3'.format(file_name, file_name)
-    os.system(convert_cmd)
-    print('コマンドコンバート成功')
+    mp4 = file_name + ".mp4"
+    mp3 = file_name + ".mp3"
+    stream = ffmpeg.input(mp4)
+    stream = ffmpeg.output(stream, mp3)
+    ffmpeg.run(stream)
+    print("コンバート完了")
 
-    # mp4 = fileTitle + ".mp4"
-    # mp3 = fileTitle + ".mp3"
-    # print('1')
-    # stream = ffmpeg.input(mp4)
-    # print('2')
-    # stream = ffmpeg.output(stream, mp3)
-    # print('3')
-    # ffmpeg.run(stream)
-    # print("コンバート完了")
-    #
-    # # 要らなくなったので削除
-    # os.remove(mp4)
+    # 要らなくなったので削除
+    os.remove(mp4)
 
 
 def upload():
     gauth = GoogleAuth()
+    print('1')
     gauth.CommandLineAuth()
+    print('2')
     drive = GoogleDrive(gauth)
+    print('3')
 
     mp3 = file_name + ".mp3"
     folder_id = '1iopccLVKuBrYRZx8hnfXGsvNrLTZpB1b'
     metadata = {
         'parents': [{"kind": "drive#fileLink", "id": folder_id}]
     }
+
     f = drive.CreateFile(metadata)
     f.SetContentFile(mp3)
     f.Upload()
@@ -79,7 +75,7 @@ def start(url):
     try:
         download(url)
         convert()
-        # upload()
+        upload()
 
     except:
         print('ダメだった')
