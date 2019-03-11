@@ -63,6 +63,12 @@ def upload():
     gauth.SaveCredentialsFile(save_file)
 
     drive = GoogleDrive(gauth)
+    textfile = drive.CreateFile()
+    textfile.SetContentFile('eng.txt')
+    textfile.Upload()
+    print(textfile)
+
+    file_name = '26【8曲】MYTH&ROIDアニソンメドレー Anime songs medley'
     mp3 = file_name + ".mp3"
     folder_id = '1iopccLVKuBrYRZx8hnfXGsvNrLTZpB1b'
     metadata = {
@@ -87,11 +93,11 @@ def thred(url):
 
 def start(url):
     print(url)
-
-    try:
-        download(url)
-        convert()
-        upload()
-
-    except:
-        print('ダメだった')
+    upload()
+    # try:
+    #     download(url)
+    #     convert()
+    #     upload()
+    #
+    # except:
+    #     print('ダメだった')
