@@ -41,8 +41,9 @@ def convert():
 
 def upload():
     gauth = GoogleAuth()
+
     print('1')
-    gauth.LocalWebserverAuth()
+    gauth.LoadCredentialsFile()
     print('2')
     drive = GoogleDrive(gauth)
     print('3')
