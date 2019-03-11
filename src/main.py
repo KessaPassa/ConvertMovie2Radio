@@ -39,27 +39,28 @@ def convert():
 
 
 def upload():
-    save_file = 'credentials.json'
+    save_file = 'mycreds.txt'
 
     gauth = GoogleAuth()
     # Try to load saved client credentials
     print('1')
     gauth.LoadCredentialsFile(save_file)
     if gauth.credentials is None:
+        print('2')
         # Authenticate if they're not there
         gauth.LocalWebserverAuth()
-        print('2')
     elif gauth.access_token_expired:
+        print('3')
         # Refresh them if expired
         gauth.Refresh()
-        print('3')
     else:
+        print('4')
         # Initialize the saved creds
         gauth.Authorize()
-        print('4')
+
     # Save the current credentials to a file
-    gauth.SaveCredentialsFile(save_file)
     print('5')
+    gauth.SaveCredentialsFile(save_file)
 
     drive = GoogleDrive(gauth)
     mp3 = file_name + ".mp3"
