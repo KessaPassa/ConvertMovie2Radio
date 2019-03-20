@@ -1,5 +1,9 @@
 .idea
 .DS_Store
+credentials.json
+settings.yaml
+db.sqlite3
+
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
