@@ -4,10 +4,9 @@ from pydrive.auth import GoogleAuth
 from pydrive.drive import GoogleDrive
 import os
 import threading
-import urllib.request as request
-import oauth2client.client
-import httplib2
+import requests
 import json
+import oauth2client.client
 
 file_name = ""
 
@@ -61,9 +60,6 @@ def upload():
             access_token = cred_dir['access_token']
             scope = cred_dir['scopes'][1]
 
-            # print(cred_dir['access_token'])
-            # code = oauth2client.client.AccessTokenCredentials(cred_dir['access_token'], 'my-user-agent/1.0')
-
     else:
         print('環境変数読み込み')
         client_id = os.environ.get('client_id')
@@ -72,22 +68,31 @@ def upload():
 
     flow = oauth2client.client.OAuth2WebServerFlow(client_id, client_secret,
                                                    scope=scope,
-                                                   redirect_uri='http://127.0.0.1:8000')
+                                                   redirect_uri='http://127.0.0.1:8000/redirect')
 
-    flow.step1_get_authorize_url()
-    # print(auth_uri)
-    flow_info = flow.step1_get_device_and_user_codes()
-    print(flow_info)
-    code = flow_info.device_code
+    auth_uri = flow.step1_get_authorize_url()
+    print(auth_uri)
+    res = requests.get(auth_uri)
+
+    # res = requests.get(auth_uri)
+    # print(res.text)
+
+    # with open('auth.txt', 'w') as f:
+    #     f.write(res.text)
+    #     f.close()
+
+    # flow_info = flow.step1_get_device_and_user_codes()
+    # print(flow_info)
+    # code = '4/EgHdpR_sxcz6rbs5Idu9QqltgXagtoOra-yLTlQuTThM7Mzdc5wLSJxORIG0qDGJKbISsc6sehmlseLxfsGu210'
     # step2 = flow.step2_exchange(device_flow_info=flow_info)
     # print(step2)
 
-    credentials = flow.step2_exchange(device_flow_info=flow_info)
+    # credentials = flow.step2_exchange(device_flow_info=flow_info)
     # credentials = oauth2client.client.credentials_from_code(client_id, client_secret,
     #                                                         scope=scope,
     # #                                                         code=code)
-    credentials.authorize(httplib2.Http())
-    gauth.credentials = credentials
+    # credentials.authorize(httplib2.Http())
+    # gauth.credentials = credentials
 
     # gauth = GoogleAuth()
     # oauth_url = gauth.GetAuthUrl()
