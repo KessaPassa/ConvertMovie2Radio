@@ -28,17 +28,29 @@ def setup():
     driver = webdriver.Chrome(executable_path=driver_path)
     driver.maximize_window()  # 画面サイズ最大化
 
-    url = 'https://accounts.google.com/o/oauth2/v2/auth?client_id=254274857640-m67daekujrusm6gpnlf9ud8o7tdmif03.apps.googleusercontent.com&redirect_uri=urn%3Aietf%3Awg%3Aoauth%3A2.0%3Aoob&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fdrive.file&access_type=offline&response_type=code'
+    conf_dir = {
+        'client_id': os.getenv('client_id') or os.environ.get('client_id'),
+        'redirect_uri': os.getenv('redirect_uri') or os.environ.get('redirect_uri'),
+        'scope': 'https://www.googleapis.com/auth/drive.file',
+        'access_type': 'offline',
+        'response_type': 'code',
+    }
+    print(conf_dir)
+
+    url = 'https://accounts.google.com/o/oauth2/v2/auth' \
+          '?client_id={client_id}&redirect_uri={redirect_uri}' \
+          '&scope={scope}' \
+          '&access_type={access_type}' \
+          '&response_type={response_type}' \
+        .format(**conf_dir)
     driver.get(url)
 
     return driver
 
 
 def login_google(driver):
-    # login_id = os.environ.get('login_id')
-    login_id = os.getenv('login_id')
-    # login_password = os.environ.get('login_password')
-    login_password = os.getenv('login_password')
+    login_id = os.getenv('login_id') or os.environ.get('login_id')
+    login_password = os.getenv('login_password') or os.environ.get('login_password')
 
     # IDを入力
     login_id_xpath = '//*[@id="identifierNext"]'
@@ -88,10 +100,14 @@ def get_authrozation_code(driver):
     authorization = driver.find_element_by_xpath(authorization_xpath)
     code = authorization.text
 
+    driver.quit()
+
     return code
 
 
-if __name__ == '__main__':
+# ここにアクセスで処理開始
+# if __name__ == '__main__':
+def main():
     # Chromeを起動
     driver = setup()
 
@@ -100,4 +116,4 @@ if __name__ == '__main__':
 
     # authorization_codeの取得
     code = get_authrozation_code(driver)
-    print(code)
+    print('authorization_code', code)
