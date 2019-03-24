@@ -3,6 +3,8 @@
 credentials.json
 settings.yaml
 db.sqlite3
+*.mp4
+*.mp3
 
 
 # Byte-compiled / optimized / DLL files

@@ -1,12 +1,16 @@
 from pytube import YouTube
 import ffmpeg
-from pydrive.auth import GoogleAuth
-from pydrive.drive import GoogleDrive
 import os
 import threading
-import src.setup_google as setup_google
+import src.googledrive as googledrive
+import src.uploader as uploader
 
-file_name = ""
+file_name = ''
+FOLDER_DIR = './tmp/'
+
+
+def get_file_path(name):
+    return FOLDER_DIR + name
 
 
 def download(url):
@@ -22,14 +26,14 @@ def download(url):
     yt.player_config_args["title"] = file_name
 
     video = yt.streams.filter(progressive=True, file_extension='mp4').first()
-    video.download()
+    video.download(FOLDER_DIR)
 
     print(file_name, "のダウンロード完了")
 
 
 def convert():
-    mp4 = file_name + ".mp4"
-    mp3 = file_name + ".mp3"
+    mp4 = get_file_path(file_name) + ".mp4"
+    mp3 = get_file_path(file_name) + ".mp3"
     stream = ffmpeg.input(mp4)
     stream = ffmpeg.output(stream, mp3)
     ffmpeg.run(stream)
@@ -40,24 +44,14 @@ def convert():
 
 
 def upload():
-    setup_google.main()
+    if not os.path.exists('credentials.json'):
+        googledrive.start()
+    uploader.start(file_name)
 
-    gauth = GoogleAuth()
-    drive = GoogleDrive(gauth)
-
-    mp3 = file_name + ".mp3"
-    folder_id = '1iopccLVKuBrYRZx8hnfXGsvNrLTZpB1b'
-    metadata = {
-        'parents': [{"kind": "drive#fileLink", "id": folder_id}]
-    }
-
-    f = drive.CreateFile(metadata)
-    f.SetContentFile(mp3)
-    f.Upload()
     print("アップロード完了")
 
     # 要らなくなったので削除
-    os.remove(mp3)
+    os.remove(get_file_path(file_name)+'.mp3')
 
 
 # 非同期処理
