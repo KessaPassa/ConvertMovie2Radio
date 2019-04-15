@@ -15,6 +15,7 @@ def get_file_path(name):
 
 
 def download(url):
+    print(1)
     yt = YouTube(url)
 
     # 特殊文字が入っていると消されて、ファイルのパスを取得できないので
@@ -33,6 +34,7 @@ def download(url):
 
 
 def convert():
+    print(2)
     mp4 = get_file_path(file_name) + ".mp4"
     mp3 = get_file_path(file_name) + ".mp3"
     stream = ffmpeg.input(mp4)
@@ -45,6 +47,7 @@ def convert():
 
 
 def upload():
+    print(3)
     if not os.path.exists('credentials.json'):
         googledrive.start()
     uploader.start(file_name)
