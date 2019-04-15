@@ -4,6 +4,7 @@ from src import main
 
 def index(request):
     url = request.GET.get('url_field')
+
     thread = ''
     if url:
         thread = main.thred(url)

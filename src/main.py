@@ -17,24 +17,26 @@ def get_file_path(name):
 def download(url):
     print(1)
     yt = YouTube(url)
-
+    print(2)
     # 特殊文字が入っていると消されて、ファイルのパスを取得できないので
     global file_name
     file_name = yt.title
+    print(3)
     list = ["　", "/", ":", "*", "?", "<", ">", "|", "\"", "\\", "\'", "."]
     for item in list:
         file_name = file_name.replace(item, "")
+    print(4)
     # タイトルを変更
     yt.player_config_args["title"] = file_name
-
+    print(5)
     video = yt.streams.filter(progressive=True, file_extension='mp4').first()
+    print(6)
     video.download(DIR_NAME)
 
     print(file_name, "のダウンロード完了")
 
 
 def convert():
-    print(2)
     mp4 = get_file_path(file_name) + ".mp4"
     mp3 = get_file_path(file_name) + ".mp3"
     stream = ffmpeg.input(mp4)
@@ -47,7 +49,6 @@ def convert():
 
 
 def upload():
-    print(3)
     if not os.path.exists('credentials.json'):
         googledrive.start()
     uploader.start(file_name)
