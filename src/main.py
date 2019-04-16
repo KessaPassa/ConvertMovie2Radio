@@ -76,9 +76,12 @@ def thred(url):
 
 def start(url):
     print(url)
+    remake_dir()
+
     download(url)
     convert()
     upload()
+
     remake_dir()
     return '完了'
     # try:

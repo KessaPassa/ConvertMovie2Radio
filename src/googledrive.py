@@ -19,6 +19,9 @@ env_path = Path('.') / '.env'
 load_dotenv(dotenv_path=env_path)
 # --- end ---
 
+ENVIRONMENT_PATH_HEADER = os.getenv('ENVIRONMENT_PATH_HEADER') or os.environ.get('ENVIRONMENT_PATH_HEADER')
+CHROME_DRIVER = os.getenv('CHROME_DRIVER_PATH') or os.environ.get('CHROME_DRIVER_PATH')
+
 CLIENT_ID = 'client_id'
 CLIENT_SECRET = 'client_secret'
 REDIRECT_URI = 'redirect_uri'
@@ -29,7 +32,7 @@ wait_time = 10
 
 def setup():
     # chromedriverのPATHを指定（Pythonファイルと同じフォルダの場合）
-    driver_path = './chromedriver'
+    driver_path = CHROME_DRIVER
 
     # Chrome起動
     driver = webdriver.Chrome(executable_path=driver_path)
