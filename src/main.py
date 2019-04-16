@@ -7,31 +7,31 @@ import src.googledrive as googledrive
 import src.uploader as uploader
 
 file_name = ''
-DIR_NAME = '../tmp/'
+
+# ローカルだと同一場所。herokuだと1つ上の場所
+TMP_DIR_NAME = os.getenv('TMP_DIR_NAME') or os.environ.get('TMP_DIR_NAME')
 
 
 def get_file_path(name):
-    return DIR_NAME + name
+    return TMP_DIR_NAME + name
 
 
 def download(url):
-    print(1)
     yt = YouTube(url)
-    print(2)
+
     # 特殊文字が入っていると消されて、ファイルのパスを取得できないので
     global file_name
     file_name = yt.title
-    print(3)
+
     list = ["　", "/", ":", "*", "?", "<", ">", "|", "\"", "\\", "\'", "."]
     for item in list:
         file_name = file_name.replace(item, "")
-    print(4)
+
     # タイトルを変更
     yt.player_config_args["title"] = file_name
-    print(5)
+
     video = yt.streams.filter(progressive=True, file_extension='mp4').first()
-    print(6)
-    video.download(DIR_NAME)
+    video.download(TMP_DIR_NAME)
 
     print(file_name, "のダウンロード完了")
 
@@ -50,6 +50,7 @@ def convert():
 
 def upload():
     if not os.path.exists('credentials.json'):
+        print('credentialsなし')
         googledrive.start()
     uploader.start(file_name)
 
@@ -60,8 +61,8 @@ def upload():
 
 
 def remake_dir():
-    shutil.rmtree(DIR_NAME)
-    os.mkdir(DIR_NAME)
+    shutil.rmtree(TMP_DIR_NAME)
+    os.mkdir(TMP_DIR_NAME)
     print('フォルダのリメイク完了')
 
 
@@ -74,13 +75,20 @@ def thred(url):
 
 def start(url):
     print(url)
-    try:
-        download(url)
-        convert()
-        upload()
-        remake_dir()
-        return '完了'
+    download(url)
+    convert()
+    upload()
+    remake_dir()
+    return '完了'
+    # try:
+    #     download(url)
+    #     convert()
+    #     upload()
+    #     remake_dir()
+    #     return '完了'
+    #
+    # except:
+    #     print('ダメだった')
+    #     remake_dir()
+    #     return 'もう一度やり直してください'
 
-    except:
-        print('ダメだった')
-        return 'もう一度やり直してください'
