@@ -199,28 +199,40 @@ def create_credentials(access_token, refresh_token):
 
 # ここにアクセスで処理開始
 def start():
-    for i in range(1, 3+1):
-        print(i, '回目')
-        try:
-            # Chromeを起動
-            driver = setup()
-            # authorization_codeの取得
-            code = get_authrozation_code(driver)
-            print('authorization_code: ', code)
-            # access_tokenとrefresh_tokenの取得
-            access_token, refresh_token = get_tokens(code)
-            # credentials.jsonを作成
-            create_credentials(access_token, refresh_token)
+    # Chromeを起動
+    driver = setup()
+    # authorization_codeの取得
+    code = get_authrozation_code(driver)
+    print('authorization_code: ', code)
+    # access_tokenとrefresh_tokenの取得
+    access_token, refresh_token = get_tokens(code)
+    # credentials.jsonを作成
+    create_credentials(access_token, refresh_token)
 
-            print('googleアカウント認証完了')
-            break
+    print('googleアカウント認証完了')
 
-        except Exception:
-            print('エラー')
-            continue
+    # for i in range(1, 3+1):
+    #     print(i, '回目')
+    #     try:
+    #         # Chromeを起動
+    #         driver = setup()
+    #         # authorization_codeの取得
+    #         code = get_authrozation_code(driver)
+    #         print('authorization_code: ', code)
+    #         # access_tokenとrefresh_tokenの取得
+    #         access_token, refresh_token = get_tokens(code)
+    #         # credentials.jsonを作成
+    #         create_credentials(access_token, refresh_token)
+    #
+    #         print('googleアカウント認証完了')
+    #         break
+    #
+    #     except Exception:
+    #         print('エラー')
+    #         continue
 
 # /app/.apt/usr/bin/google-chrome
 
 
-if __name__ == '__main__':
-    start()
+# if __name__ == '__main__':
+#     start()
