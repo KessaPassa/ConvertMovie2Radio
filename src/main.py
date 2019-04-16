@@ -62,7 +62,8 @@ def upload():
 
 
 def remake_dir():
-    shutil.rmtree(TEMP_DIR)
+    if os.path.exists(TEMP_DIR):
+        shutil.rmtree(TEMP_DIR)
     os.mkdir(TEMP_DIR)
     print('フォルダのリメイク完了')
 
