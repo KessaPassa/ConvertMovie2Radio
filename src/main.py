@@ -62,10 +62,10 @@ def upload():
 
 
 def remake_dir():
-    print(os.path.exists(TEMP_DIR))
     if os.path.exists(TEMP_DIR):
         shutil.rmtree(TEMP_DIR)
     os.mkdir(TEMP_DIR)
+    with open(TEMP_DIR + 'empty.txt', 'w'): pass
     print('フォルダのリメイク完了')
 
 
@@ -97,4 +97,3 @@ def start(url):
     #     print('ダメだった')
     #     remake_dir()
     #     return 'もう一度やり直してください'
-

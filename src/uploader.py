@@ -74,6 +74,7 @@ def start(file_name):
     uploader = GoogleDriveUploader()
     uploader.upload_file(file_name)
 
+
 # if __name__ == '__main__':
 #     uploader = GoogleDriveUploader()
 #     uploader.upload_file('hoge')

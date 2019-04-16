@@ -4,6 +4,7 @@ from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
+from selenium.webdriver.chrome.options import Options
 import urllib.request
 import json
 import datetime
@@ -20,7 +21,8 @@ load_dotenv(dotenv_path=env_path)
 # --- end ---
 
 ENVIRONMENT_PATH_HEADER = os.getenv('ENVIRONMENT_PATH_HEADER') or os.environ.get('ENVIRONMENT_PATH_HEADER')
-CHROME_DRIVER = os.getenv('CHROME_DRIVER_PATH') or os.environ.get('CHROME_DRIVER_PATH')
+CHROME_DRIVER_PATH = os.getenv('CHROME_DRIVER_PATH') or os.environ.get('CHROME_DRIVER_PATH')
+CHROME_BINARY_PATH = os.getenv('CHROME_BINARY_PATH') or os.environ.get('CHROME_BINARY_PATH')
 
 CLIENT_ID = 'client_id'
 CLIENT_SECRET = 'client_secret'
@@ -31,11 +33,14 @@ wait_time = 10
 
 
 def setup():
-    # chromedriverのPATHを指定（Pythonファイルと同じフォルダの場合）
-    driver_path = CHROME_DRIVER
+    options = Options()
+    # Heroku以外ではNone
+    if CHROME_BINARY_PATH is not None:
+        print('CHROME_BINARY_PATH')
+        options.binary_location = CHROME_BINARY_PATH
+    options.add_argument('--headless')
 
-    # Chrome起動
-    driver = webdriver.Chrome(executable_path=driver_path)
+    driver = webdriver.Chrome(executable_path=CHROME_DRIVER_PATH, options=options)
     driver.maximize_window()  # 画面サイズ最大化
 
     conf_dir = {
@@ -205,5 +210,6 @@ def start():
     access_token, refresh_token = get_tokens(code)
     create_credentials(access_token, refresh_token)
 
-# if __name__ == '__main__':
-#     start()
+
+if __name__ == '__main__':
+    start()
