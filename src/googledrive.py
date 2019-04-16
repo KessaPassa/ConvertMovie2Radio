@@ -71,14 +71,16 @@ def get_authrozation_code(driver):
 
     # IDを入力
     login_id_xpath = '//*[@id="identifierNext"]'
-    WebDriverWait(driver, wait_time).until(EC.presence_of_element_located((By.XPATH, login_id_xpath)))
+    # WebDriverWait(driver, wait_time).until(EC.presence_of_element_located((By.XPATH, login_id_xpath)))
+    driver.set_page_load_timeout(wait_time)
     driver.find_element_by_name("identifier").send_keys(login_id)
     driver.find_element_by_xpath(login_id_xpath).click()
     time.sleep(2)
 
     # パスワードを入力
     login_password_xpath = '//*[@id="passwordNext"]'
-    WebDriverWait(driver, wait_time).until(EC.presence_of_element_located((By.XPATH, login_password_xpath)))
+    # WebDriverWait(driver, wait_time).until(EC.presence_of_element_located((By.XPATH, login_password_xpath)))
+    driver.set_page_load_timeout(wait_time)
     driver.find_element_by_name("password").send_keys(login_password)
     driver.find_element_by_xpath(login_password_xpath).click()
 
@@ -96,19 +98,22 @@ def get_authrozation_code(driver):
 
     # oauthScopeDialogの許可
     allow_login_xpath = '//*[@class="U26fgb O0WRkf oG5Srb C0oVfc kHssdc M9Bg4d"]'
-    WebDriverWait(driver, wait_time).until(EC.presence_of_element_located((By.XPATH, allow_login_xpath)))
+    # WebDriverWait(driver, wait_time).until(EC.presence_of_element_located((By.XPATH, allow_login_xpath)))
+    driver.set_page_load_timeout(wait_time)
     allow_login = driver.find_element_by_xpath(allow_login_xpath)
     allow_login.click()
 
     # スコープの許可
     approve_access_xpath = '//*[@id="submit_approve_access"]'
-    WebDriverWait(driver, wait_time).until(EC.presence_of_element_located((By.XPATH, approve_access_xpath)))
+    # WebDriverWait(driver, wait_time).until(EC.presence_of_element_located((By.XPATH, approve_access_xpath)))
+    driver.set_page_load_timeout(wait_time)
     approve_access = driver.find_element_by_xpath(approve_access_xpath)
     approve_access.click()
 
     # authorization_codeの取得
     authorization_xpath = '//textarea[@class="qBHUIf"]'
-    WebDriverWait(driver, wait_time).until(EC.presence_of_element_located((By.XPATH, authorization_xpath)))
+    # WebDriverWait(driver, wait_time).until(EC.presence_of_element_located((By.XPATH, authorization_xpath)))
+    driver.set_page_load_timeout(wait_time)
     authorization = driver.find_element_by_xpath(authorization_xpath)
     code = authorization.text
 
