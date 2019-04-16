@@ -22,7 +22,7 @@ load_dotenv(dotenv_path=env_path)
 # --- end ---
 
 ENVIRONMENT_PATH_HEADER = os.getenv('ENVIRONMENT_PATH_HEADER') or os.environ.get('ENVIRONMENT_PATH_HEADER')
-TEMP_DIR = ENVIRONMENT_PATH_HEADER + 'tmp/'
+TEMP_DIR = ENVIRONMENT_PATH_HEADER + 'strage/'
 EXTENSION = '.mp3'
 MIME_TYPE = 'audio/mp3'
 CREDENTIALS_PATH = ENVIRONMENT_PATH_HEADER + 'credentials.json'
