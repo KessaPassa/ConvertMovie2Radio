@@ -20,7 +20,7 @@ env_path = Path('.') / '.env'
 load_dotenv(dotenv_path=env_path)
 # --- end ---
 
-CHROME_DRIVER_PATH = os.environ.get('CHROME_BINARY_PATH') or './chromedriver'
+CHROME_DRIVER_PATH = os.environ.get('CHROME_DRIVER_PATH') or './chromedriver'
 CHROME_BINARY_PATH = os.environ.get('CHROME_BINARY_PATH')
 CLIENT_ID = 'client_id'
 CLIENT_SECRET = 'client_secret'
