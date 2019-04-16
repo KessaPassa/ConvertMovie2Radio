@@ -76,6 +76,7 @@ def get_authrozation_code(driver):
     driver.find_element_by_name("identifier").send_keys(login_id)
     driver.find_element_by_xpath(login_id_xpath).click()
     time.sleep(2)
+    print(1)
 
     # パスワードを入力
     login_password_xpath = '//*[@id="passwordNext"]'
@@ -83,6 +84,7 @@ def get_authrozation_code(driver):
     driver.set_page_load_timeout(wait_time)
     driver.find_element_by_name("password").send_keys(login_password)
     driver.find_element_by_xpath(login_password_xpath).click()
+    print(2)
 
     # アカウント選択
     # select_account = '//*[@data-identifier="{}"]'.format(login_id)
@@ -102,6 +104,7 @@ def get_authrozation_code(driver):
     driver.set_page_load_timeout(wait_time)
     allow_login = driver.find_element_by_xpath(allow_login_xpath)
     allow_login.click()
+    print(3)
 
     # スコープの許可
     approve_access_xpath = '//*[@id="submit_approve_access"]'
@@ -109,6 +112,7 @@ def get_authrozation_code(driver):
     driver.set_page_load_timeout(wait_time)
     approve_access = driver.find_element_by_xpath(approve_access_xpath)
     approve_access.click()
+    print(4)
 
     # authorization_codeの取得
     authorization_xpath = '//textarea[@class="qBHUIf"]'
@@ -116,6 +120,7 @@ def get_authrozation_code(driver):
     driver.set_page_load_timeout(wait_time)
     authorization = driver.find_element_by_xpath(authorization_xpath)
     code = authorization.text
+    print(5)
 
     driver.quit()
     return code
