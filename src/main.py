@@ -8,9 +8,8 @@ import src.uploader as uploader
 
 file_name = ''
 
-ENVIRONMENT_PATH_HEADER = os.getenv('ENVIRONMENT_PATH_HEADER') or os.environ.get('ENVIRONMENT_PATH_HEADER')
 TEMP_DIR = 'strage/'
-CREDENTIALS_PATH = ENVIRONMENT_PATH_HEADER + 'credentials.json'
+CREDENTIALS_PATH = 'credentials.json'
 
 
 def get_file_path(name):

@@ -21,11 +21,10 @@ env_path = Path('.') / '.env'
 load_dotenv(dotenv_path=env_path)
 # --- end ---
 
-ENVIRONMENT_PATH_HEADER = os.getenv('ENVIRONMENT_PATH_HEADER') or os.environ.get('ENVIRONMENT_PATH_HEADER')
-TEMP_DIR = ENVIRONMENT_PATH_HEADER + 'strage/'
+TEMP_DIR = 'strage/'
 EXTENSION = '.mp3'
 MIME_TYPE = 'audio/mp3'
-CREDENTIALS_PATH = ENVIRONMENT_PATH_HEADER + 'credentials.json'
+CREDENTIALS_PATH = 'credentials.json'
 FOLDER_ID = os.getenv('folder_id') or os.environ.get('folder_id')
 APPLICATION_NAME = 'ConvertMovie2Radio'
 SCOPES = os.getenv('scopes') or os.environ.get('scopes')

@@ -20,10 +20,8 @@ env_path = Path('.') / '.env'
 load_dotenv(dotenv_path=env_path)
 # --- end ---
 
-ENVIRONMENT_PATH_HEADER = os.getenv('ENVIRONMENT_PATH_HEADER') or os.environ.get('ENVIRONMENT_PATH_HEADER')
-CHROME_DRIVER_PATH = os.getenv('CHROME_DRIVER_PATH') or os.environ.get('CHROME_DRIVER_PATH')
-CHROME_BINARY_PATH = os.getenv('CHROME_BINARY_PATH') or os.environ.get('CHROME_BINARY_PATH')
-
+CHROME_DRIVER_PATH = os.environ.get('CHROME_BINARY_PATH') or './chromedriver'
+CHROME_BINARY_PATH = os.environ.get('CHROME_BINARY_PATH')
 CLIENT_ID = 'client_id'
 CLIENT_SECRET = 'client_secret'
 REDIRECT_URI = 'redirect_uri'
@@ -206,19 +204,22 @@ def start():
         try:
             # Chromeを起動
             driver = setup()
-
             # authorization_codeの取得
             code = get_authrozation_code(driver)
             print('authorization_code: ', code)
+            # access_tokenとrefresh_tokenの取得
             access_token, refresh_token = get_tokens(code)
+            # credentials.jsonを作成
             create_credentials(access_token, refresh_token)
+
+            print('googleアカウント認証完了')
             break
 
         except Exception:
             print('エラー')
             continue
 
-    print('googleアカウント認証完了')
+# /app/.apt/usr/bin/google-chrome
 
 
 if __name__ == '__main__':
