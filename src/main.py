@@ -8,12 +8,13 @@ import src.uploader as uploader
 
 file_name = ''
 
-# ローカルだと同一場所。herokuだと1つ上の場所
-TMP_DIR_NAME = os.getenv('TMP_DIR_NAME') or os.environ.get('TMP_DIR_NAME')
+ENVIRONMENT_PATH_HEADER = os.getenv('ENVIRONMENT_PATH_HEADER') or os.environ.get('ENVIRONMENT_PATH_HEADER')
+TEMP_DIR = ENVIRONMENT_PATH_HEADER + 'tmp/'
+CREDENTIALS_PATH = ENVIRONMENT_PATH_HEADER + 'credentials.json'
 
 
 def get_file_path(name):
-    return TMP_DIR_NAME + name
+    return TEMP_DIR + name
 
 
 def download(url):
@@ -31,7 +32,7 @@ def download(url):
     yt.player_config_args["title"] = file_name
 
     video = yt.streams.filter(progressive=True, file_extension='mp4').first()
-    video.download(TMP_DIR_NAME)
+    video.download(TEMP_DIR)
 
     print(file_name, "のダウンロード完了")
 
@@ -49,7 +50,7 @@ def convert():
 
 
 def upload():
-    if not os.path.exists('credentials.json'):
+    if not os.path.exists(CREDENTIALS_PATH):
         print('credentialsなし')
         googledrive.start()
     uploader.start(file_name)
@@ -61,8 +62,8 @@ def upload():
 
 
 def remake_dir():
-    shutil.rmtree(TMP_DIR_NAME)
-    os.mkdir(TMP_DIR_NAME)
+    shutil.rmtree(TEMP_DIR)
+    os.mkdir(TEMP_DIR)
     print('フォルダのリメイク完了')
 
 

@@ -21,13 +21,15 @@ env_path = Path('.') / '.env'
 load_dotenv(dotenv_path=env_path)
 # --- end ---
 
-FILE_DIR = './tmp/'
+ENVIRONMENT_PATH_HEADER = os.getenv('ENVIRONMENT_PATH_HEADER') or os.environ.get('ENVIRONMENT_PATH_HEADER')
+TEMP_DIR = ENVIRONMENT_PATH_HEADER + 'tmp/'
 EXTENSION = '.mp3'
 MIME_TYPE = 'audio/mp3'
-CREDENTIALS_PATH = './credentials.json'
+CREDENTIALS_PATH = ENVIRONMENT_PATH_HEADER + 'credentials.json'
 FOLDER_ID = os.getenv('folder_id') or os.environ.get('folder_id')
 APPLICATION_NAME = 'ConvertMovie2Radio'
 SCOPES = os.getenv('scopes') or os.environ.get('scopes')
+
 
 # ここをコメントアウトするとgunicorn: error: unrecognized argumentsになる
 # try:
@@ -58,7 +60,7 @@ class GoogleDriveUploader:
 
     def upload_file(self, file_name):
         # ファイルをアップロードする
-        file_path = FILE_DIR + file_name + EXTENSION
+        file_path = TEMP_DIR + file_name + EXTENSION
         media_body = MediaFileUpload(file_path, mimetype=MIME_TYPE, resumable=True)
         body = {
             'name': file_name,
@@ -71,7 +73,6 @@ class GoogleDriveUploader:
 def start(file_name):
     uploader = GoogleDriveUploader()
     uploader.upload_file(file_name)
-
 
 # if __name__ == '__main__':
 #     uploader = GoogleDriveUploader()
