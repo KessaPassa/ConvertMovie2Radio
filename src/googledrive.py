@@ -38,7 +38,7 @@ def setup():
         options.binary_location = CHROME_BINARY_PATH
     options.add_argument('--headless')
 
-    driver = webdriver.Chrome(executable_path=CHROME_DRIVER_PATH, options=options)
+    driver = webdriver.Chrome(executable_path=CHROME_DRIVER_PATH, chrome_options=options)
     driver.maximize_window()  # 画面サイズ最大化
 
     conf_dir = {
@@ -88,13 +88,15 @@ def get_authrozation_code(driver):
     driver.set_page_load_timeout(wait_time)
     driver.find_element_by_name("password").send_keys(login_password)
     driver.find_element_by_xpath(login_password_xpath).click()
+    time.sleep(2)
 
     # アカウント選択
     # select_account = '//*[@data-identifier="{}"]'.format(login_id)
-    # # select_account = '//*[@jsname="rwl3qc"]'
+    select_account = '//*[@class="vR13fe k6Zj8d SmR8"]'
     # WebDriverWait(driver, wait_time).until(EC.presence_of_element_located((By.XPATH, select_account)))
-    # driver.find_element_by_xpath(select_account).submit()
-    # time.sleep(1)
+    driver.set_page_load_timeout(wait_time)
+    driver.find_element_by_xpath(select_account).submit()
+    time.sleep(1)
 
     # ダイアログ取得
     # dialog_xpath = '//*[@class="g3VIld aQ7q2c Up8vH J9Nfi iWO5td"][@id="oauthScopeDialog"]'
@@ -107,6 +109,7 @@ def get_authrozation_code(driver):
     driver.set_page_load_timeout(wait_time)
     allow_login = driver.find_element_by_xpath(allow_login_xpath)
     allow_login.click()
+    time.sleep(2)
 
     # スコープの許可
     approve_access_xpath = '//*[@id="submit_approve_access"]'
@@ -244,5 +247,5 @@ def start():
 # /app/.apt/usr/bin/google-chrome
 
 
-# if __name__ == '__main__':
-#     start()
+if __name__ == '__main__':
+    start()
