@@ -1,16 +1,19 @@
 from pytube import YouTube
 import ffmpeg
 import os
+import shutil
 import threading
 import src.googledrive as googledrive
 import src.uploader as uploader
 
 file_name = ''
-FOLDER_DIR = './tmp/'
+
+TEMP_DIR = 'strage/'
+CREDENTIALS_PATH = 'credentials.json'
 
 
 def get_file_path(name):
-    return FOLDER_DIR + name
+    return TEMP_DIR + name
 
 
 def download(url):
@@ -19,14 +22,16 @@ def download(url):
     # 特殊文字が入っていると消されて、ファイルのパスを取得できないので
     global file_name
     file_name = yt.title
+
     list = ["　", "/", ":", "*", "?", "<", ">", "|", "\"", "\\", "\'", "."]
     for item in list:
         file_name = file_name.replace(item, "")
+
     # タイトルを変更
     yt.player_config_args["title"] = file_name
 
     video = yt.streams.filter(progressive=True, file_extension='mp4').first()
-    video.download(FOLDER_DIR)
+    video.download(TEMP_DIR)
 
     print(file_name, "のダウンロード完了")
 
@@ -44,14 +49,23 @@ def convert():
 
 
 def upload():
-    if not os.path.exists('credentials.json'):
+    if not os.path.exists(CREDENTIALS_PATH):
+        print('credentialsなし')
         googledrive.start()
     uploader.start(file_name)
 
     print("アップロード完了")
 
     # 要らなくなったので削除
-    os.remove(get_file_path(file_name)+'.mp3')
+    os.remove(get_file_path(file_name) + '.mp3')
+
+
+def remake_dir():
+    if os.path.exists(TEMP_DIR):
+        shutil.rmtree(TEMP_DIR)
+    os.mkdir(TEMP_DIR)
+    with open(TEMP_DIR + 'empty.txt', 'w'): pass
+    print('フォルダのリメイク完了')
 
 
 # 非同期処理
@@ -63,9 +77,22 @@ def thred(url):
 
 def start(url):
     print(url)
-    try:
-        download(url)
-        convert()
-        upload()
-    except:
-        print('ダメだった')
+    remake_dir()
+
+    download(url)
+    convert()
+    upload()
+
+    remake_dir()
+    return '完了'
+    # try:
+    #     download(url)
+    #     convert()
+    #     upload()
+    #     remake_dir()
+    #     return '完了'
+    #
+    # except:
+    #     print('ダメだった')
+    #     remake_dir()
+    #     return 'もう一度やり直してください'

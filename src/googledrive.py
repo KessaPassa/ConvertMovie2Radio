@@ -4,6 +4,7 @@ from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
+from selenium.webdriver.chrome.options import Options
 import urllib.request
 import json
 import datetime
@@ -19,20 +20,25 @@ env_path = Path('.') / '.env'
 load_dotenv(dotenv_path=env_path)
 # --- end ---
 
+CHROME_DRIVER_PATH = os.environ.get('CHROME_DRIVER_PATH') or './chromedriver'
+CHROME_BINARY_PATH = os.environ.get('CHROME_BINARY_PATH')
 CLIENT_ID = 'client_id'
 CLIENT_SECRET = 'client_secret'
 REDIRECT_URI = 'redirect_uri'
 
 # 最大待機時間（秒）
-wait_time = 10
+wait_time = 30
 
 
 def setup():
-    # chromedriverのPATHを指定（Pythonファイルと同じフォルダの場合）
-    driver_path = './chromedriver'
+    options = Options()
+    # Heroku以外ではNone
+    if CHROME_BINARY_PATH is not None:
+        print('CHROME_BINARY_PATH')
+        options.binary_location = CHROME_BINARY_PATH
+    options.add_argument('--headless')
 
-    # Chrome起動
-    driver = webdriver.Chrome(executable_path=driver_path)
+    driver = webdriver.Chrome(executable_path=CHROME_DRIVER_PATH, chrome_options=options)
     driver.maximize_window()  # 画面サイズ最大化
 
     conf_dir = {
@@ -61,26 +67,36 @@ def setup():
 def get_authrozation_code(driver):
     login_id = os.getenv('login_id') or os.environ.get('login_id')
     login_password = os.getenv('login_password') or os.environ.get('login_password')
+    time.sleep(2)
 
+    print(1)
     # IDを入力
     login_id_xpath = '//*[@id="identifierNext"]'
-    WebDriverWait(driver, wait_time).until(EC.presence_of_element_located((By.XPATH, login_id_xpath)))
+    print(2)
+    # WebDriverWait(driver, wait_time).until(EC.presence_of_element_located((By.XPATH, login_id_xpath)))
+    driver.set_page_load_timeout(wait_time)
+    print(3)
     driver.find_element_by_name("identifier").send_keys(login_id)
+    print(4)
     driver.find_element_by_xpath(login_id_xpath).click()
+    print(5)
     time.sleep(2)
 
     # パスワードを入力
     login_password_xpath = '//*[@id="passwordNext"]'
-    WebDriverWait(driver, wait_time).until(EC.presence_of_element_located((By.XPATH, login_password_xpath)))
+    # WebDriverWait(driver, wait_time).until(EC.presence_of_element_located((By.XPATH, login_password_xpath)))
+    driver.set_page_load_timeout(wait_time)
     driver.find_element_by_name("password").send_keys(login_password)
     driver.find_element_by_xpath(login_password_xpath).click()
+    time.sleep(2)
 
     # アカウント選択
     # select_account = '//*[@data-identifier="{}"]'.format(login_id)
-    # # select_account = '//*[@jsname="rwl3qc"]'
+    select_account = '//*[@class="vR13fe k6Zj8d SmR8"]'
     # WebDriverWait(driver, wait_time).until(EC.presence_of_element_located((By.XPATH, select_account)))
-    # driver.find_element_by_xpath(select_account).submit()
-    # time.sleep(1)
+    driver.set_page_load_timeout(wait_time)
+    driver.find_element_by_xpath(select_account).submit()
+    time.sleep(1)
 
     # ダイアログ取得
     # dialog_xpath = '//*[@class="g3VIld aQ7q2c Up8vH J9Nfi iWO5td"][@id="oauthScopeDialog"]'
@@ -89,24 +105,27 @@ def get_authrozation_code(driver):
 
     # oauthScopeDialogの許可
     allow_login_xpath = '//*[@class="U26fgb O0WRkf oG5Srb C0oVfc kHssdc M9Bg4d"]'
-    WebDriverWait(driver, wait_time).until(EC.presence_of_element_located((By.XPATH, allow_login_xpath)))
+    # WebDriverWait(driver, wait_time).until(EC.presence_of_element_located((By.XPATH, allow_login_xpath)))
+    driver.set_page_load_timeout(wait_time)
     allow_login = driver.find_element_by_xpath(allow_login_xpath)
     allow_login.click()
+    time.sleep(2)
 
     # スコープの許可
     approve_access_xpath = '//*[@id="submit_approve_access"]'
-    WebDriverWait(driver, wait_time).until(EC.presence_of_element_located((By.XPATH, approve_access_xpath)))
+    # WebDriverWait(driver, wait_time).until(EC.presence_of_element_located((By.XPATH, approve_access_xpath)))
+    driver.set_page_load_timeout(wait_time)
     approve_access = driver.find_element_by_xpath(approve_access_xpath)
     approve_access.click()
 
     # authorization_codeの取得
     authorization_xpath = '//textarea[@class="qBHUIf"]'
-    WebDriverWait(driver, wait_time).until(EC.presence_of_element_located((By.XPATH, authorization_xpath)))
+    # WebDriverWait(driver, wait_time).until(EC.presence_of_element_located((By.XPATH, authorization_xpath)))
+    driver.set_page_load_timeout(wait_time)
     authorization = driver.find_element_by_xpath(authorization_xpath)
     code = authorization.text
 
     driver.quit()
-
     return code
 
 
@@ -195,12 +214,38 @@ def create_credentials(access_token, refresh_token):
 def start():
     # Chromeを起動
     driver = setup()
-
     # authorization_codeの取得
     code = get_authrozation_code(driver)
     print('authorization_code: ', code)
+    # access_tokenとrefresh_tokenの取得
     access_token, refresh_token = get_tokens(code)
+    # credentials.jsonを作成
     create_credentials(access_token, refresh_token)
 
-# if __name__ == '__main__':
-#     start()
+    print('googleアカウント認証完了')
+
+    # for i in range(1, 3+1):
+    #     print(i, '回目')
+    #     try:
+    #         # Chromeを起動
+    #         driver = setup()
+    #         # authorization_codeの取得
+    #         code = get_authrozation_code(driver)
+    #         print('authorization_code: ', code)
+    #         # access_tokenとrefresh_tokenの取得
+    #         access_token, refresh_token = get_tokens(code)
+    #         # credentials.jsonを作成
+    #         create_credentials(access_token, refresh_token)
+    #
+    #         print('googleアカウント認証完了')
+    #         break
+    #
+    #     except Exception:
+    #         print('エラー')
+    #         continue
+
+# /app/.apt/usr/bin/google-chrome
+
+
+if __name__ == '__main__':
+    start()

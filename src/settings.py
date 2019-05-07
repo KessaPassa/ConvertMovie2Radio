@@ -32,7 +32,7 @@ SECRET_KEY = '#6bu@tf!32q3z#&noz(^t01jjew0bmw1=dwoy7x*bu!b+mx^m='
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'convertmovie2radio.herokuapp.com']
+ALLOWED_HOSTS = ['0.0.0.0', '127.0.0.1', 'convertmovie2radio.herokuapp.com']
 
 # Application definition
 
